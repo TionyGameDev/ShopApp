@@ -1,0 +1,11 @@
+C:\Project\ShopApp\ShopApp.Domain\bin\Debug\net8.0\ShopApp.Domain.deps.json
+C:\Project\ShopApp\ShopApp.Domain\bin\Debug\net8.0\ShopApp.Domain.dll
+C:\Project\ShopApp\ShopApp.Domain\bin\Debug\net8.0\ShopApp.Domain.pdb
+C:\Project\ShopApp\ShopApp.Domain\obj\Debug\net8.0\ShopApp.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Project\ShopApp\ShopApp.Domain\obj\Debug\net8.0\ShopApp.Domain.AssemblyInfoInputs.cache
+C:\Project\ShopApp\ShopApp.Domain\obj\Debug\net8.0\ShopApp.Domain.AssemblyInfo.cs
+C:\Project\ShopApp\ShopApp.Domain\obj\Debug\net8.0\ShopApp.Domain.csproj.CoreCompileInputs.cache
+C:\Project\ShopApp\ShopApp.Domain\obj\Debug\net8.0\ShopApp.Domain.dll
+C:\Project\ShopApp\ShopApp.Domain\obj\Debug\net8.0\refint\ShopApp.Domain.dll
+C:\Project\ShopApp\ShopApp.Domain\obj\Debug\net8.0\ShopApp.Domain.pdb
+C:\Project\ShopApp\ShopApp.Domain\obj\Debug\net8.0\ref\ShopApp.Domain.dll

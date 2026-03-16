@@ -1,0 +1,17 @@
+C:\Project\ShopApp\ShopApp.Infrastructure\bin\Debug\net8.0\ShopApp.Infrastructure.deps.json
+C:\Project\ShopApp\ShopApp.Infrastructure\bin\Debug\net8.0\ShopApp.Infrastructure.dll
+C:\Project\ShopApp\ShopApp.Infrastructure\bin\Debug\net8.0\ShopApp.Infrastructure.pdb
+C:\Project\ShopApp\ShopApp.Infrastructure\bin\Debug\net8.0\ShopApp.Application.dll
+C:\Project\ShopApp\ShopApp.Infrastructure\bin\Debug\net8.0\ShopApp.Domain.dll
+C:\Project\ShopApp\ShopApp.Infrastructure\bin\Debug\net8.0\ShopApp.Application.pdb
+C:\Project\ShopApp\ShopApp.Infrastructure\bin\Debug\net8.0\ShopApp.Domain.pdb
+C:\Project\ShopApp\ShopApp.Infrastructure\obj\Debug\net8.0\ShopApp.Infrastructure.csproj.AssemblyReference.cache
+C:\Project\ShopApp\ShopApp.Infrastructure\obj\Debug\net8.0\ShopApp.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+C:\Project\ShopApp\ShopApp.Infrastructure\obj\Debug\net8.0\ShopApp.Infrastructure.AssemblyInfoInputs.cache
+C:\Project\ShopApp\ShopApp.Infrastructure\obj\Debug\net8.0\ShopApp.Infrastructure.AssemblyInfo.cs
+C:\Project\ShopApp\ShopApp.Infrastructure\obj\Debug\net8.0\ShopApp.Infrastructure.csproj.CoreCompileInputs.cache
+C:\Project\ShopApp\ShopApp.Infrastructure\obj\Debug\net8.0\ShopApp..52198142.Up2Date
+C:\Project\ShopApp\ShopApp.Infrastructure\obj\Debug\net8.0\ShopApp.Infrastructure.dll
+C:\Project\ShopApp\ShopApp.Infrastructure\obj\Debug\net8.0\refint\ShopApp.Infrastructure.dll
+C:\Project\ShopApp\ShopApp.Infrastructure\obj\Debug\net8.0\ShopApp.Infrastructure.pdb
+C:\Project\ShopApp\ShopApp.Infrastructure\obj\Debug\net8.0\ref\ShopApp.Infrastructure.dll
