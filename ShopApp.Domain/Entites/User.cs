@@ -7,7 +7,7 @@ public class User
   public string Email { get; set; } = string.Empty;
   public string PasswordHash { get; set; }
   public string Role { get; set; } = "Default";
-  public DateTime CreatedAt { get; set; }
+  public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
   public bool IsAdmin() => Role == "Admin";
 

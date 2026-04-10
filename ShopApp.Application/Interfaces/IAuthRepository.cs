@@ -5,8 +5,7 @@ namespace ShopApp.Application.Interfaces;
 
 public interface IAuthRepository
 {
-  Task<User> Login(LoginDto model);
   Task<User> AddAsync(User user);
   
-  Task<User> GetUserByEmail(string email);
+  Task<User?> GetUserByEmail(string email);
 }

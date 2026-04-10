@@ -1,33 +1,35 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Project\\ShopApp\\ShopApp\\ShopApp.csproj": {}
+    "Z:\\Teach\\ShopApp\\ShopApp\\ShopApp.csproj": {}
   },
   "projects": {
-    "C:\\Project\\ShopApp\\ShopApp.Application\\ShopApp.Application.csproj": {
+    "Z:\\Teach\\ShopApp\\ShopApp.Application\\ShopApp.Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Project\\ShopApp\\ShopApp.Application\\ShopApp.Application.csproj",
+        "projectUniqueName": "Z:\\Teach\\ShopApp\\ShopApp.Application\\ShopApp.Application.csproj",
         "projectName": "ShopApp.Application",
-        "projectPath": "C:\\Project\\ShopApp\\ShopApp.Application\\ShopApp.Application.csproj",
-        "packagesPath": "C:\\Users\\tiony\\.nuget\\packages\\",
-        "outputPath": "C:\\Project\\ShopApp\\ShopApp.Application\\obj\\",
+        "projectPath": "Z:\\Teach\\ShopApp\\ShopApp.Application\\ShopApp.Application.csproj",
+        "packagesPath": "C:\\Users\\Marseille\\.nuget\\packages\\",
+        "outputPath": "Z:\\Teach\\ShopApp\\ShopApp.Application\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\tiony\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\Marseille\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Project\\ShopApp\\ShopApp.Domain\\ShopApp.Domain.csproj": {
-                "projectPath": "C:\\Project\\ShopApp\\ShopApp.Domain\\ShopApp.Domain.csproj"
+              "Z:\\Teach\\ShopApp\\ShopApp.Domain\\ShopApp.Domain.csproj": {
+                "projectPath": "Z:\\Teach\\ShopApp\\ShopApp.Domain\\ShopApp.Domain.csproj"
               }
             }
           }
@@ -54,6 +56,10 @@
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
               "version": "[8.0.24, )"
+            },
+            "RabbitMQ.Client": {
+              "target": "Package",
+              "version": "[7.2.1, )"
             }
           },
           "imports": [
@@ -76,22 +82,24 @@
         }
       }
     },
-    "C:\\Project\\ShopApp\\ShopApp.Domain\\ShopApp.Domain.csproj": {
+    "Z:\\Teach\\ShopApp\\ShopApp.Domain\\ShopApp.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Project\\ShopApp\\ShopApp.Domain\\ShopApp.Domain.csproj",
+        "projectUniqueName": "Z:\\Teach\\ShopApp\\ShopApp.Domain\\ShopApp.Domain.csproj",
         "projectName": "ShopApp.Domain",
-        "projectPath": "C:\\Project\\ShopApp\\ShopApp.Domain\\ShopApp.Domain.csproj",
-        "packagesPath": "C:\\Users\\tiony\\.nuget\\packages\\",
-        "outputPath": "C:\\Project\\ShopApp\\ShopApp.Domain\\obj\\",
+        "projectPath": "Z:\\Teach\\ShopApp\\ShopApp.Domain\\ShopApp.Domain.csproj",
+        "packagesPath": "C:\\Users\\Marseille\\.nuget\\packages\\",
+        "outputPath": "Z:\\Teach\\ShopApp\\ShopApp.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\tiony\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\Marseille\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -134,30 +142,32 @@
         }
       }
     },
-    "C:\\Project\\ShopApp\\ShopApp.Infrastructure\\ShopApp.Infrastructure.csproj": {
+    "Z:\\Teach\\ShopApp\\ShopApp.Infrastructure\\ShopApp.Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Project\\ShopApp\\ShopApp.Infrastructure\\ShopApp.Infrastructure.csproj",
+        "projectUniqueName": "Z:\\Teach\\ShopApp\\ShopApp.Infrastructure\\ShopApp.Infrastructure.csproj",
         "projectName": "ShopApp.Infrastructure",
-        "projectPath": "C:\\Project\\ShopApp\\ShopApp.Infrastructure\\ShopApp.Infrastructure.csproj",
-        "packagesPath": "C:\\Users\\tiony\\.nuget\\packages\\",
-        "outputPath": "C:\\Project\\ShopApp\\ShopApp.Infrastructure\\obj\\",
+        "projectPath": "Z:\\Teach\\ShopApp\\ShopApp.Infrastructure\\ShopApp.Infrastructure.csproj",
+        "packagesPath": "C:\\Users\\Marseille\\.nuget\\packages\\",
+        "outputPath": "Z:\\Teach\\ShopApp\\ShopApp.Infrastructure\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\tiony\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\Marseille\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Project\\ShopApp\\ShopApp.Application\\ShopApp.Application.csproj": {
-                "projectPath": "C:\\Project\\ShopApp\\ShopApp.Application\\ShopApp.Application.csproj"
+              "Z:\\Teach\\ShopApp\\ShopApp.Application\\ShopApp.Application.csproj": {
+                "projectPath": "Z:\\Teach\\ShopApp\\ShopApp.Application\\ShopApp.Application.csproj"
               }
             }
           }
@@ -179,11 +189,25 @@
           "dependencies": {
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[9.0.14, )"
+              "version": "[8.0.0, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[8.0.0, )"
             },
             "Npgsql.EntityFrameworkCore.PostgreSQL": {
               "target": "Package",
-              "version": "[9.0.4, )"
+              "version": "[8.0.0, )"
+            },
+            "RabbitMQ.Client": {
+              "target": "Package",
+              "version": "[7.2.1, )"
+            },
+            "StackExchange.Redis": {
+              "target": "Package",
+              "version": "[2.12.14, )"
             }
           },
           "imports": [
@@ -206,33 +230,35 @@
         }
       }
     },
-    "C:\\Project\\ShopApp\\ShopApp\\ShopApp.csproj": {
+    "Z:\\Teach\\ShopApp\\ShopApp\\ShopApp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Project\\ShopApp\\ShopApp\\ShopApp.csproj",
+        "projectUniqueName": "Z:\\Teach\\ShopApp\\ShopApp\\ShopApp.csproj",
         "projectName": "ShopApp",
-        "projectPath": "C:\\Project\\ShopApp\\ShopApp\\ShopApp.csproj",
-        "packagesPath": "C:\\Users\\tiony\\.nuget\\packages\\",
-        "outputPath": "C:\\Project\\ShopApp\\ShopApp\\obj\\",
+        "projectPath": "Z:\\Teach\\ShopApp\\ShopApp\\ShopApp.csproj",
+        "packagesPath": "C:\\Users\\Marseille\\.nuget\\packages\\",
+        "outputPath": "Z:\\Teach\\ShopApp\\ShopApp\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\tiony\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\Marseille\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Project\\ShopApp\\ShopApp.Application\\ShopApp.Application.csproj": {
-                "projectPath": "C:\\Project\\ShopApp\\ShopApp.Application\\ShopApp.Application.csproj"
+              "Z:\\Teach\\ShopApp\\ShopApp.Application\\ShopApp.Application.csproj": {
+                "projectPath": "Z:\\Teach\\ShopApp\\ShopApp.Application\\ShopApp.Application.csproj"
               },
-              "C:\\Project\\ShopApp\\ShopApp.Infrastructure\\ShopApp.Infrastructure.csproj": {
-                "projectPath": "C:\\Project\\ShopApp\\ShopApp.Infrastructure\\ShopApp.Infrastructure.csproj"
+              "Z:\\Teach\\ShopApp\\ShopApp.Infrastructure\\ShopApp.Infrastructure.csproj": {
+                "projectPath": "Z:\\Teach\\ShopApp\\ShopApp.Infrastructure\\ShopApp.Infrastructure.csproj"
               }
             }
           }
@@ -255,6 +281,12 @@
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
               "version": "[8.0.24, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[8.0.0, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",

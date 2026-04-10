@@ -8,24 +8,26 @@
     "net8.0": []
   },
   "packageFolders": {
-    "C:\\Users\\tiony\\.nuget\\packages\\": {}
+    "C:\\Users\\Marseille\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Project\\ShopApp\\ShopApp.Domain\\ShopApp.Domain.csproj",
+      "projectUniqueName": "Z:\\Teach\\ShopApp\\ShopApp.Domain\\ShopApp.Domain.csproj",
       "projectName": "ShopApp.Domain",
-      "projectPath": "C:\\Project\\ShopApp\\ShopApp.Domain\\ShopApp.Domain.csproj",
-      "packagesPath": "C:\\Users\\tiony\\.nuget\\packages\\",
-      "outputPath": "C:\\Project\\ShopApp\\ShopApp.Domain\\obj\\",
+      "projectPath": "Z:\\Teach\\ShopApp\\ShopApp.Domain\\ShopApp.Domain.csproj",
+      "packagesPath": "C:\\Users\\Marseille\\.nuget\\packages\\",
+      "outputPath": "Z:\\Teach\\ShopApp\\ShopApp.Domain\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\tiony\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\Marseille\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
       ],
       "sources": {
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {

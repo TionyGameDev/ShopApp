@@ -2,20 +2,16 @@
 using System.Security.Claims;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using ShopApp.Application.Services.AuthServices;
 
-namespace ShopApp.Application.Services.AuthServices;
-
-public interface IJwtService
-{
-  string GenerationToken(Guid Id,string role = "");
-}
+namespace ShopApp.Infrastructure.Services;
 
 public class JwtService : IJwtService
 {
   private readonly string _secret;
   public JwtService(IConfiguration configuration)
   {
-    _secret = configuration["Jwt:Secret"];
+    _secret = configuration["Jwt:Secret"] ?? string.Empty;
   }
 
   public string GenerationToken(Guid Id,string role = "")
@@ -29,7 +25,7 @@ public class JwtService : IJwtService
     claims.Add(new Claim("id",Id.ToString()));
         
     JwtSecurityToken token = new JwtSecurityToken(
-      expires: DateTime.Now.AddHours(10),
+      expires: DateTime.UtcNow.AddHours(10),
       signingCredentials: credentials,
       claims: claims);
         

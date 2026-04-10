@@ -5,30 +5,32 @@ using ShopApp.Domain.Exceptions;
 
 namespace ShopApp.Application.Services.ProductServices;
 
-public class ProductService : IProductService
+public class ProductService(IProductRepository productRepository, ICacheService cacheService) : IProductService
 {
-  private readonly IProductRepository _productRepository;
-
-  public ProductService(IProductRepository productRepository) => _productRepository = productRepository;
-
   public async Task<ProductDto> CreateProduct(CreateProductDto createProduct)
   {
-    var product =  await _productRepository.AddAsync(ConvertToProduct(createProduct));
+    var product =  await productRepository.AddAsync(ConvertToProduct(createProduct));
+    await cacheService.RemoveAsync("products");
+    await cacheService.SetAsync(product.Id.ToString(),product);
     return ConvertToProductDto(product);
   }
 
   public async Task RemoveProduct(Guid idProduct)
   {
-    var product = await _productRepository.GetByIdAsync(idProduct);
+    var product = await productRepository.GetByIdAsync(idProduct);
     if (product != null)
-      await _productRepository.RemoveAsync(product.Id);
+    {
+      await productRepository.RemoveAsync(product.Id);
+      await cacheService.RemoveAsync("products");
+      await cacheService.RemoveAsync(product.Id.ToString());
+    }
     else
       throw new NotFoundException("Product", idProduct);
   }
 
   public async Task<ProductDto> UpdateProduct(ProductDto product)
   {
-    var productToUpdate = await _productRepository.GetByIdAsync(product.Id);
+    var productToUpdate = await productRepository.GetByIdAsync(product.Id);
     if (productToUpdate != null)
     {
       productToUpdate.Name = product.Name;
@@ -36,7 +38,9 @@ public class ProductService : IProductService
       productToUpdate.Stock = product.Stock;
       productToUpdate.Description = product.Description;
       
-      await _productRepository.UpdateAsync(productToUpdate);
+      await productRepository.UpdateAsync(productToUpdate);
+      await cacheService.SetAsync(product.Id.ToString(),productToUpdate);
+      
       return ConvertToProductDto(productToUpdate);
     }
     
@@ -45,26 +49,33 @@ public class ProductService : IProductService
 
   public async Task<List<ProductDto>> GetProducts()
   {
-    var list =  await _productRepository.GetAllAsync();
-    return list.Select(ConvertToProductDto).ToList();
+    var products = await cacheService.GetAsync<List<Product>>("products");
+    if (products == null)
+    {
+      products = await productRepository.GetAllAsync();
+      await cacheService.SetAsync("products", products, TimeSpan.FromDays(1));
+    }
+    return products.Select(ConvertToProductDto).ToList();
   }
 
   public async Task<ProductDto> GetProductById(Guid idProduct)
   {
-    var product = await _productRepository.GetByIdAsync(idProduct);
-    if (product != null)
-      return ConvertToProductDto(product);
-    
-    throw new NotFoundException("Product", idProduct);
+    var product = await cacheService.GetAsync<Product>(idProduct.ToString());
+    if (product == null)
+    {
+      product = await productRepository.GetByIdAsync(idProduct) ?? throw new NotFoundException("Product", idProduct);
+      await cacheService.SetAsync(idProduct.ToString(), product, TimeSpan.FromDays(1));
+    }
+    return ConvertToProductDto(product);
   }
 
   public async Task DecreaseStock(Guid idProduct,int amount)
   {
-    var product = await _productRepository.GetByIdAsync(idProduct);
+    var product = await productRepository.GetByIdAsync(idProduct);
     if (product != null)
     {
       product.DecreaseStock(amount);
-      await _productRepository.UpdateAsync(product);
+      await productRepository.UpdateAsync(product);
     }
   }
 

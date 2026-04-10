@@ -1,6 +1,5 @@
 using ShopApp.Application.DTOs.Orders;
 using ShopApp.Application.Interfaces;
-using ShopApp.Application.Services.ProductServices;
 using ShopApp.Domain.Entites;
 using ShopApp.Domain.Exceptions;
 
@@ -10,9 +9,12 @@ public class OrderService : IOrderService
 {
   private readonly IOrderRepository _orderRepository;
   private IProductRepository  _productRepository;
-  public OrderService(IOrderRepository orderRepository,IProductRepository  productRepository)
+  private readonly IMessageBus _messageBus;
+
+  public OrderService(IOrderRepository orderRepository,IProductRepository  productRepository,IMessageBus  messageBus)
   {
     _productRepository = productRepository;
+    _messageBus = messageBus;
     _orderRepository = orderRepository;
   }
 
@@ -20,8 +22,8 @@ public class OrderService : IOrderService
   {
     var order = new Order();
     order.UserId = userId;
-    order.CreatedAt = DateTime.Now;
-    order.OrderStatus = StatusOrder.Processing;
+    order.CreatedAt = DateTime.UtcNow;
+    order.OrderStatus = StatusOrder.Pending;
     var product = await _productRepository.GetByIdAsync(createOrderDto.ProductId);
     if (product != null)
     {
@@ -38,6 +40,12 @@ public class OrderService : IOrderService
     else
       throw new NotFoundException("Product not found", createOrderDto.ProductId);
 
+    await _messageBus.PublishAsync("order.created", new
+    {
+      orderId = order.Id,
+      userId = order.UserId,
+      Total = order.Items.Sum(i => i.Quantity * i.Price)
+    });
     return ConvertToOrderDto(order);
   }
 

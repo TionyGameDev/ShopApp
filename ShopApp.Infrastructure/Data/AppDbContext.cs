@@ -15,7 +15,7 @@
           
     }
 
-    override protected void OnModelCreating(ModelBuilder modelBuilder)
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
       base.OnModelCreating(modelBuilder);
       
@@ -40,6 +40,10 @@
         .HasMany(d => d.Items)
         .WithOne()
         .HasForeignKey(x => x.OrderId);
+
+      modelBuilder.Entity<Order>()
+        .Property(o => o.OrderStatus)
+        .HasConversion<string>();
       
       modelBuilder.Entity<OrderItem>()
         .HasOne(d => d.Product)
