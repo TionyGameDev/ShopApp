@@ -8,17 +8,34 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Grpc.AspNetCore" Version="2.80.0" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.24" />
+        <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.2.11" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0">
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
           <PrivateAssets>all</PrivateAssets>
         </PackageReference>
+        <PackageReference Include="Serilog.AspNetCore" Version="10.0.0" />
+        <PackageReference Include="Serilog.Sinks.Console" Version="6.1.1" />
+        <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\ShopApp.Application\ShopApp.Application.csproj" />
       <ProjectReference Include="..\ShopApp.Infrastructure\ShopApp.Infrastructure.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Protobuf Include="Protos\product.proto" GrpcServices="Server" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Include="wwwroot\test.html" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include=".github\workflows\ci.yml" />
     </ItemGroup>
 
 </Project>

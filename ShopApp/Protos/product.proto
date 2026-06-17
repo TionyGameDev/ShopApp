@@ -1,0 +1,26 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "ShopApp.Grpc";
+
+service ProductGrpcService {
+  rpc GetProduct (GetProductRequest) returns (ProductResponse);
+  rpc GetProducts (EmptyRequest) returns (ProductListResponse);
+}
+
+message GetProductRequest {
+  string id = 1;
+}
+
+message ProductResponse {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  double price = 4;
+  int32 stock = 5;
+}
+
+message ProductListResponse {
+  repeated ProductResponse products = 1;
+}
+
+message EmptyRequest {}

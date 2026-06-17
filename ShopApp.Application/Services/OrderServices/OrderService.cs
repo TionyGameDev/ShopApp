@@ -1,76 +1,98 @@
+using System.Transactions;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Logging;
 using ShopApp.Application.DTOs.Orders;
 using ShopApp.Application.Interfaces;
+using ShopApp.Application.Transations;
 using ShopApp.Domain.Entites;
 using ShopApp.Domain.Exceptions;
 
 namespace ShopApp.Application.Services.OrderServices;
 
-public class OrderService : IOrderService
+public class OrderService(IOrderRepository orderRepository, IProductRepository productRepository
+  ,IEventBus eventBus, IUnitOfWork unitOfWork,IOrderNotificationService notification
+  ,ILogger<OrderService> logger) : IOrderService
 {
-  private readonly IOrderRepository _orderRepository;
-  private IProductRepository  _productRepository;
-  private readonly IMessageBus _messageBus;
-
-  public OrderService(IOrderRepository orderRepository,IProductRepository  productRepository,IMessageBus  messageBus)
-  {
-    _productRepository = productRepository;
-    _messageBus = messageBus;
-    _orderRepository = orderRepository;
-  }
-
   public async Task<OrderDto> CreateOrder(CreateOrderDto createOrderDto, Guid userId)
   {
-    var order = new Order();
-    order.UserId = userId;
-    order.CreatedAt = DateTime.UtcNow;
-    order.OrderStatus = StatusOrder.Pending;
-    var product = await _productRepository.GetByIdAsync(createOrderDto.ProductId);
-    if (product != null)
+    logger.LogInformation("Создаём заказ для пользователя {UserId}, товар {ProductId}", 
+      userId, createOrderDto.ProductId);
+    
+    await unitOfWork.BeginTransactionAsync(IsolationLevel.ReadCommitted); 
+    var order = new Order
     {
-      var orderItem = new OrderItem();
-      product.DecreaseStock(createOrderDto.Quantity);
+      UserId = userId,
+      CreatedAt = DateTime.UtcNow,
+      OrderStatus = StatusOrder.Pending
+    };
+    try
+    {
+      var product = await productRepository.GetByIdAsync(createOrderDto.ProductId);
+      if (product != null)
+      {
+        var orderItem = new OrderItem();
+        product.DecreaseStock(createOrderDto.Quantity);
       
-      orderItem.ProductId = product.Id;
-      orderItem.Quantity = createOrderDto.Quantity;
-      orderItem.Price = product.Price;
+        orderItem.ProductId = product.Id;
+        orderItem.Quantity = createOrderDto.Quantity;
+        orderItem.Price = product.Price;
       
-      order.Items.Add(orderItem);
-      await _orderRepository.AddAsync(order);
-    }
-    else
-      throw new NotFoundException("Product not found", createOrderDto.ProductId);
+        order.Items.Add(orderItem);
+        
+        await orderRepository.AddAsync(order);
+        await unitOfWork.CommitAsync();
 
-    await _messageBus.PublishAsync("order.created", new
+        logger.LogInformation("Заказ {OrderId} успешно создан", order.Id);
+        
+        await eventBus.PublishAsync("order.created", new
+        {
+          orderId = order.Id,
+          userId = order.UserId,
+          Total = order.Items
+            .Sum(i => i.Quantity * i.Price)
+        });
+      }
+      else
+      {
+        logger.LogWarning("Товар {ProductId} не найден", createOrderDto.ProductId);
+        throw new NotFoundException("Product not found", createOrderDto.ProductId);
+      }
+    }
+    catch (Exception ex)
     {
-      orderId = order.Id,
-      userId = order.UserId,
-      Total = order.Items.Sum(i => i.Quantity * i.Price)
-    });
+      logger.LogError(ex, "Ошибка при создании заказа для пользователя {UserId}", userId); // ✅
+      await unitOfWork.RollbackAsync();
+      throw;
+    }
+
+    
     return ConvertToOrderDto(order);
   }
 
   public async Task<OrderDto> GetOrder(Guid idOrder)
   {
-    var order = await _orderRepository.GetAsync(idOrder);
+    var order = await orderRepository.GetAsync(idOrder);
     return ConvertToOrderDto(order);
   }
 
   public async Task<List<OrderDto>> GetByUserId(Guid userId)
   {
-    var order = await _orderRepository.GetByUserIdAsync(userId);
+    var order = await orderRepository.GetByUserIdAsync(userId);
     var listOrder = order.Select(ConvertToOrderDto).ToList();
     return listOrder;
   }
 
   public async Task CancelOrder(Guid idOrder)
   {
-    var order =  await _orderRepository.GetAsync(idOrder);
+    var order =  await orderRepository.GetAsync(idOrder);
     if (order != null)
     {
       if (order.OrderStatus == StatusOrder.Pending)
       {
         order.OrderStatus = StatusOrder.Cancelled;
-        await _orderRepository.UpdateAsync(order);
+        await orderRepository.UpdateAsync(order);
+        await notification.NotifyOrderStatusChanged(idOrder, "Cancelled");
+        logger.LogInformation("Заказ отменен {IdOrder}", idOrder);
       }
       else
         throw new DomainException("Order cannot be cancelled.");

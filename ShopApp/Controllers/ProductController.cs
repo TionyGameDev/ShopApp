@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ShopApp.Application.CQRS.Products.Commands;
+using ShopApp.Application.CQRS.Products.Queries;
 using ShopApp.Application.DTOs.Products;
 using ShopApp.Application.Services.ProductServices;
 
@@ -7,20 +10,20 @@ namespace ShopApp.Controllers;
 
 [ApiController]
 [Route("api/product")]
-public class ProductController(IProductService service) : ControllerBase
+public class ProductController(IMediator mediator) : ControllerBase
 {
     [HttpPut] [Authorize(Roles = "Admin")]
     [EndpointSummary("Обновить товар")]
     public async Task<ActionResult> UpdateProduct([FromBody] ProductDto product)
     {
-         await service.UpdateProduct(product);
-         return Ok();
+        await mediator.Send(new UpdateProductCommand(product));
+        return Ok();
     }
     [HttpDelete("{id:guid}")] [Authorize(Roles = "Admin")]
     [EndpointSummary("Убрать товар")]
     public async Task<ActionResult> RemoveProduct(Guid id)
     {
-        await service.RemoveProduct(id);
+        await mediator.Send(new DeleteProductCommand(id));
         return Ok();
     }
     
@@ -28,7 +31,7 @@ public class ProductController(IProductService service) : ControllerBase
     [EndpointSummary("Создать товар")]
     public async Task<ActionResult<ProductDto>> CreateProduct([FromBody] CreateProductDto product)
     {
-        var productNew = await service.CreateProduct(product);
+        var productNew = await mediator.Send(new CreateProductCommand(product));
         return CreatedAtAction(nameof(GetProductById), new {id = productNew.Id}, product);
     }
     
@@ -36,16 +39,16 @@ public class ProductController(IProductService service) : ControllerBase
     [EndpointSummary("Все товары")]
     public async Task<ActionResult<List<ProductDto>>> GetProducts()
     {
-        var products = await service.GetProducts();
-        return Ok(products);
+        var result = await mediator.Send(new GetProductsQuery());
+        return Ok(result);
     }
     
     [HttpGet("{id:guid}")]  [Authorize]
     [EndpointSummary("Взять товар по ID")]
     public async Task<ActionResult<ProductDto>> GetProductById(Guid id)
     {
-        var products = await service.GetProductById(id);
-        return Ok(products);
+        var result = await mediator.Send(new GetProductByIdQuery(id));
+        return Ok(result);
         
     }
     

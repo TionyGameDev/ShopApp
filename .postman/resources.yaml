@@ -1,0 +1,7 @@
+# Use this workspace to collaborate
+workspace:
+  id: a21cf35b-2d8d-433c-88e2-92165020998c
+
+localResources:
+  specs:
+    - ..\ShopApp\Protos\product.proto

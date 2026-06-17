@@ -1,0 +1,30 @@
+﻿<!DOCTYPE html>
+<html>
+<body>
+<div id="status">Connecting...</div>
+<input id="orderId" placeholder="Order ID" />
+<button onclick="join()">Join</button>
+<div id="log"></div>
+
+<script src="/signalr.min.js"></script>
+<script>
+    const conn = new signalR.HubConnectionBuilder()
+        .withUrl("/hubs/orders")
+        .build();
+
+    conn.on("OrderStatusChanged", data => {
+        document.getElementById("log").innerHTML += `<p>✅ ${JSON.stringify(data)}</p>`;
+    });
+
+    conn.start().then(() => {
+        document.getElementById("status").innerText = "✅ Connected!";
+    }).catch(e => {
+        document.getElementById("status").innerText = "❌ " + e;
+    });
+
+    function join() {
+        conn.invoke("JoinOrderGroup", document.getElementById("orderId").value);
+    }
+</script>
+</body>
+</html>

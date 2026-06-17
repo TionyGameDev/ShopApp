@@ -1,4 +1,5 @@
 ﻿using ShopApp.Application.DTOs.Products;
+using ShopApp.Domain.Entites;
 
 namespace ShopApp.Application.Services.ProductServices;
 
@@ -11,5 +12,5 @@ public interface IProductService
   Task<ProductDto> GetProductById(Guid idProduct);
   
   Task DecreaseStock (Guid idProduct,int amount);
-  
+
 }

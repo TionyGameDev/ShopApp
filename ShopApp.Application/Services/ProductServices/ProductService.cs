@@ -1,18 +1,23 @@
+using System.Transactions;
+using Microsoft.Extensions.Logging;
 using ShopApp.Application.DTOs.Products;
 using ShopApp.Application.Interfaces;
+using ShopApp.Application.Mappers;
+using ShopApp.Application.Transations;
 using ShopApp.Domain.Entites;
 using ShopApp.Domain.Exceptions;
 
 namespace ShopApp.Application.Services.ProductServices;
 
-public class ProductService(IProductRepository productRepository, ICacheService cacheService) : IProductService
+public class ProductService(IProductRepository productRepository, ICacheService cacheService
+  ,IUnitOfWork unitOfWork,ILogger<ProductService> logger) : IProductService
 {
   public async Task<ProductDto> CreateProduct(CreateProductDto createProduct)
   {
     var product =  await productRepository.AddAsync(ConvertToProduct(createProduct));
     await cacheService.RemoveAsync("products");
     await cacheService.SetAsync(product.Id.ToString(),product);
-    return ConvertToProductDto(product);
+    return product.ToDto();
   }
 
   public async Task RemoveProduct(Guid idProduct)
@@ -30,6 +35,8 @@ public class ProductService(IProductRepository productRepository, ICacheService 
 
   public async Task<ProductDto> UpdateProduct(ProductDto product)
   {
+    await unitOfWork.BeginTransactionAsync(IsolationLevel.RepeatableRead);
+    
     var productToUpdate = await productRepository.GetByIdAsync(product.Id);
     if (productToUpdate != null)
     {
@@ -41,9 +48,11 @@ public class ProductService(IProductRepository productRepository, ICacheService 
       await productRepository.UpdateAsync(productToUpdate);
       await cacheService.SetAsync(product.Id.ToString(),productToUpdate);
       
-      return ConvertToProductDto(productToUpdate);
+      await unitOfWork.CommitAsync();
+      return productToUpdate.ToDto();
     }
     
+    await unitOfWork.RollbackAsync();
     throw new NotFoundException("Product", product.Id);
   }
 
@@ -55,7 +64,7 @@ public class ProductService(IProductRepository productRepository, ICacheService 
       products = await productRepository.GetAllAsync();
       await cacheService.SetAsync("products", products, TimeSpan.FromDays(1));
     }
-    return products.Select(ConvertToProductDto).ToList();
+    return products.Select(product => product.ToDto()).ToList();
   }
 
   public async Task<ProductDto> GetProductById(Guid idProduct)
@@ -66,7 +75,7 @@ public class ProductService(IProductRepository productRepository, ICacheService 
       product = await productRepository.GetByIdAsync(idProduct) ?? throw new NotFoundException("Product", idProduct);
       await cacheService.SetAsync(idProduct.ToString(), product, TimeSpan.FromDays(1));
     }
-    return ConvertToProductDto(product);
+    return product.ToDto();
   }
 
   public async Task DecreaseStock(Guid idProduct,int amount)
@@ -88,11 +97,5 @@ public class ProductService(IProductRepository productRepository, ICacheService 
     product.Description = productDto.Description;
 
     return product;
-  }
-  
-  private ProductDto ConvertToProductDto(Product product)
-  {
-    var productDto = new ProductDto(product.Id, product.Name, product.Description, product.Price, product.Stock);
-    return productDto;
   }
 }

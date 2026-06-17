@@ -1,8 +1,10 @@
 ﻿using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Moq;
 using ShopApp.Application.DTOs.Products;
 using ShopApp.Application.Interfaces;
 using ShopApp.Application.Services.ProductServices;
+using ShopApp.Application.Transations;
 using ShopApp.Domain.Entites;
 using ShopApp.Domain.Exceptions;
 
@@ -12,13 +14,18 @@ public class ProductServiceTests
 {
     private readonly Mock<IProductRepository> _productRepositoryMock;
     private readonly Mock<ICacheService> _cacheServiceMock;
+    private readonly Mock<IUnitOfWork> _unitOfWorkMock;
+    private readonly Mock<ILogger<ProductService>> _logger;
     private readonly ProductService _productService;
 
     public ProductServiceTests()
     {
         _productRepositoryMock = new Mock<IProductRepository>();
         _cacheServiceMock = new Mock<ICacheService>();
-        _productService = new ProductService(_productRepositoryMock.Object, _cacheServiceMock.Object);
+        _unitOfWorkMock = new Mock<IUnitOfWork>();
+        _logger = new Mock<ILogger<ProductService>>();
+        _productService = new ProductService(_productRepositoryMock.Object, _cacheServiceMock.Object,
+            _unitOfWorkMock.Object,_logger.Object);
     }
 
     [Fact]

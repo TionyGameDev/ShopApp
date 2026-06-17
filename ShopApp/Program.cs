@@ -2,32 +2,37 @@ using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
+using ShopApp.Application.CQRS.Products.Queries;
 using ShopApp.Application.Interfaces;
 using ShopApp.Application.Services.AuthServices;
+using ShopApp.Application.Services.Kafka;
 using ShopApp.Application.Services.OrderServices;
 using ShopApp.Application.Services.ProductServices;
+using ShopApp.Application.Transations;
 using ShopApp.BackgroundServices;
+using ShopApp.Hubs;
 using ShopApp.Infrastructure.Data;
 using ShopApp.Infrastructure.Repositores;
 using ShopApp.Infrastructure.Services;
 using ShopApp.Midlleware;
+using ShopApp.Services;
 using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<AppDbContext>(options 
-    => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-builder.Services.AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
-builder.Services.AddEndpointsApiExplorer();
-
+AddServices(builder);
 AddSingletons(builder);
+
+AddCors(builder);
+AddLogger(builder);
 
 AddScoped(builder.Services);
 AddSwagger(builder);
 Authorization();
 
 var app = builder.Build();
+app.MapGrpcService<ProductGrpcService>();
 
 using (var scope = app.Services.CreateScope())
 {
@@ -51,18 +56,22 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors();
+app.UseDefaultFiles();
+app.UseStaticFiles();
 app.UseMiddleware<ExceptionMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.UseHttpsRedirection();
 app.MapControllers();
 
-var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
-app.Run($"http://+:{port}");
+app.MapHub<OrderHub>("/hubs/orders");
 
-
-app.Run();
+var port = Environment.GetEnvironmentVariable("PORT");
+if (port != null)
+    app.Run($"http://+:{port}");
+else
+    app.Run();
 
 
 void Authorization()
@@ -94,8 +103,8 @@ void AddScoped(IServiceCollection builderServices)
     builderServices.AddScoped<IProductRepository, ProductRepository>();
     builderServices.AddScoped<IOrderRepository, OrderRepository>();
     builderServices.AddScoped<ICacheService, CacheService>();
-    
-    builderServices.AddHostedService<OrderNotificationConsumer>();
+    builderServices.AddScoped<IUnitOfWork, UnitOfWork>();
+    builder.Services.AddScoped<IOrderNotificationService, OrderNotificationService>();
 }
 
 void AddSwagger(WebApplicationBuilder builder1)
@@ -135,6 +144,50 @@ void AddSingletons(WebApplicationBuilder webApplicationBuilder)
     {
         var config = sp.GetRequiredService<IConfiguration>();
         return RabbitMQMessageBus.CreateAsync(config).GetAwaiter().GetResult();
+    });
+    
+    builder.Services.AddSingleton<IEventBus, KafkaEventBus>();
+}
+
+void AddServices(WebApplicationBuilder webApplication)
+{
+    webApplication.Services.AddDbContext<AppDbContext>(options 
+        => options.UseNpgsql(webApplication.Configuration.GetConnectionString("DefaultConnection")));
+
+    webApplication.Services.AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
+    webApplication.Services.AddEndpointsApiExplorer();
+    webApplication.Services.AddGrpc();
+    webApplication.Services.AddSignalR();
+    
+    webApplication.Services.AddHostedService<OrderNotificationConsumer>();
+    webApplication.Services.AddHostedService<OrderKafkaConsumer>();
+    
+    webApplication.Services.AddMediatR(cfg => 
+        cfg.RegisterServicesFromAssembly(typeof(GetProductsQuery).Assembly));
+    
+}
+
+void AddLogger(WebApplicationBuilder webApplicationBuilder1)
+{
+    Log.Logger = new LoggerConfiguration()
+        .WriteTo.Console()
+        .WriteTo.File("logs/log-.txt", rollingInterval: RollingInterval.Day)
+        .MinimumLevel.Information()
+        .CreateLogger();
+
+    webApplicationBuilder1.Host.UseSerilog();
+}
+
+void AddCors(WebApplicationBuilder builder2)
+{
+    builder2.Services.AddCors(options =>
+    {
+        options.AddDefaultPolicy(policy =>
+        {
+            policy.AllowAnyOrigin()
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
     });
 }
 
